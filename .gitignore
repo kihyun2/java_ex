@@ -1,0 +1,14 @@
+# Eclipse
+bin/
+.settings/
+.classpath
+.project
+
+# IntelliJ IDEA
+out/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
