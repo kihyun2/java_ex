@@ -12,7 +12,7 @@ public class DoWhileDemo {
 			num = in.nextInt();
 		} while (num > 0);
 		System.out.println("종료!!!");
-
+		in.close();
 		// 1 ~ 10까지의 짝수만 출력
 		int number = 0;
 		while (number <= 10) {

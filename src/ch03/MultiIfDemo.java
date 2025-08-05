@@ -11,19 +11,32 @@ public class MultiIfDemo {
 
 		// 점수를 입력 받는다.
 		int score = sc.nextInt();
-
 		// 다중 if 문으로 입력 받은 점수의 학점을 계산한다.
 		String grade = "";
 		if (score >= 90) {
+			if (score >= 90 && score < 95) {
+				grade = "A0";
+			} else {
+				grade = "A+";
+			}
 			grade = "A";
 		} else if (score >= 80) {
-			grade = "B";
+			if (score >= 80 && score < 85) {
+				grade = "B0";
+			} else {
+				grade = "B+";
+			}
 		} else if (score >= 70) {
-			grade = "C";
+			if (score >= 70 && score < 75) {
+				grade = "C0";
+			} else {
+				grade = "C+";
+			}
 		} else {
 			grade = "F";
 		}
 
+		sc.close();
 		// 학점을 출력한다.
 		System.out.printf("당신의 학점은 %s 입니다.", grade);
 	}
