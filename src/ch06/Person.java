@@ -6,12 +6,17 @@ public class Person {
 	void whoAmI() {
 		System.out.println("나는 사람이다.");
 	}
+
+	void work() {
+
+	}
 }
 
 class Student extends Person {
 	int number = 3;
 	String name;
 
+	@Override
 	void work() {
 		System.out.println("나는 공부한다.");
 	}
@@ -20,6 +25,7 @@ class Student extends Person {
 class Employee extends Person {
 	int salary = 100;
 
+	@Override
 	void work() {
 		System.out.println("나는 일한다.");
 	}
@@ -28,6 +34,7 @@ class Employee extends Person {
 class SportsPlayer extends Person {
 	String sports = "축구";
 
+	@Override
 	void work() {
 		System.out.println("나는 운동한다.");
 	}
@@ -36,6 +43,7 @@ class SportsPlayer extends Person {
 class Entertainer extends Person {
 	String type = "singer";
 
+	@Override
 	void work() {
 		System.out.println("나는 노래한다.");
 	}

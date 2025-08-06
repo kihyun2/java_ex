@@ -1,6 +1,6 @@
 package ex;
 
-public class Ex2 {
+public class Ex02 {
 	public static void main(String[] args) {
 		System.out.println(sum(1, 2, 3, 4));
 		int arr[] = { 2, 3 };

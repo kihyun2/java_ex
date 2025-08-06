@@ -2,7 +2,7 @@ package ex;
 
 import java.util.Arrays;
 
-public class Ex4 {
+public class Ex04 {
 	public static void main(String[] args) {
 		String[] name = { "가위", "바위", "보" };
 		System.out.println(name);

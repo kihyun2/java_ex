@@ -1,6 +1,6 @@
 package ex;
 
-public class ex7 {
+public class Ex07 {
 	public static void main(String[] args) {
 		Point point = new Point(2, 3);
 		MovablePoint movablePoint = new MovablePoint(4, 3, 1, 1);
