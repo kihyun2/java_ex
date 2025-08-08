@@ -1,4 +1,4 @@
-package ex;
+package ex.sec1_10;
 
 public class Ex02 {
 	public static void main(String[] args) {

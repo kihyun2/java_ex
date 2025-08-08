@@ -1,4 +1,4 @@
-package ex;
+package ex.sec1_10;
 
 import java.util.Scanner;
 

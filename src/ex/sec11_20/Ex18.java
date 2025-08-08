@@ -1,4 +1,4 @@
-package ex;
+package ex.sec11_20;
 
 public class Ex18 {
 	static void speak(Talkable talkable) {
