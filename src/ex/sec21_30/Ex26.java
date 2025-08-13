@@ -119,7 +119,7 @@ public class Ex26 {
 		boolean hasChanged = false;
 		for (Account account : acList) {
 			if (account.getAccountNo().equals(accountNo)) {
-				account.setBalance(account.getBalance() + balance);
+				account.deposit(balance);
 				hasChanged = true;
 				break;
 			}
@@ -147,7 +147,7 @@ public class Ex26 {
 		for (Account account : acList) {
 			if (account.getAccountNo().equals(accountNo) && account.getBalance() >= balance
 					&& account.getPassword().equals(password)) {
-				account.setBalance(account.getBalance() - balance);
+				account.withdraw(balance);
 				hasChanged = true;
 				break;
 			}
@@ -263,15 +263,20 @@ class Account {
 		return password;
 	}
 
-	public void setBalance(long balance) {
-		this.balance = balance;
-	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
 	// 메서드
+	// 입금
+	public void deposit(long balance) {
+		this.balance += balance;
+	}
+
+	// 출금
+	public void withdraw(long balance) {
+		this.balance -= balance;
+	}
 
 	@Override
 	public String toString() {
