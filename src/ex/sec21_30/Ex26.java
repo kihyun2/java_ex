@@ -1,6 +1,7 @@
 package ex.sec21_30;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Ex26 {
@@ -11,20 +12,15 @@ public class Ex26 {
 	// 4. 예금주의 이름이나 계좌번호는 계좌 생성 후 변경할 수 없음(비밀번호는 계좌번호, 이름, 기존비밀번호가 일치하는 경우에만 변경할 수
 	// 있음)
 
-	private ArrayList<Account> acList = new ArrayList<Account>();
+	private Map<String, Account> acMap = new HashMap<>();
 
 	public static void main(String[] args) {
-		String msg = """
-				----------------------------------------------------------------
-				1. 계좌생성 | 2. 계좌목록 | 3. 예금 | 4. 출금 | 5. 비밀번호 변경 | 6. 종료
-				----------------------------------------------------------------
-				선택 >""";
 		Scanner in = new Scanner(System.in);
 		Ex26 ex = new Ex26();
 
 		String order = "";
 		while (true) {
-			System.out.print(msg);
+			print("print_menu");
 			order = in.nextLine();
 			if (order.equals("6")) {
 				System.out.println("프로그램 종료");
@@ -32,23 +28,23 @@ public class Ex26 {
 			}
 			switch (order) {
 			case "1" -> {
-				ex.print(order);
+				print(order);
 				ex.create(in);
 			}
 			case "2" -> {
-				ex.print(order);
+				print(order);
 				ex.viewAccountList();
 			}
 			case "3" -> {
-				ex.print(order);
+				print(order);
 				ex.deposit(in);
 			}
 			case "4" -> {
-				ex.print(order);
+				print(order);
 				ex.withdraw(in);
 			}
 			case "5" -> {
-				ex.print(order);
+				print(order);
 				ex.changePassword(in);
 			}
 			default -> System.out.println("이상한 거 쓰지 마세요(1-6까지 숫자 쓰세요)");
@@ -86,26 +82,22 @@ public class Ex26 {
 		}
 
 		if (isPossible) {
-			acList.add(new Account(accountNo, accountOwner, balance, password));
+			acMap.put(accountNo, new Account(accountNo, accountOwner, balance, password));
 			System.out.println("결과: 계좌가 생성되었습니다.");
 		}
 	}
 
 	// 계좌 목록
 	private void viewAccountList() {
-		for (Account account : acList) {
-			System.out.println(account);
+		for (Map.Entry<String, Account> entry : acMap.entrySet()) {
+			System.out.println(entry.getValue());
+
 		}
 	}
 
 	// 계좌 목록에 계좌 번호 중복 확인
 	private boolean hasAccountNo(String accountNo) {
-		for (Account account : acList) {
-			if (account.getAccountNo().equals(accountNo)) {
-				return true;
-			}
-		}
-		return false;
+		return acMap.containsKey(accountNo);
 	}
 
 	// 예금
@@ -116,15 +108,8 @@ public class Ex26 {
 		long balance = in.nextLong();
 		in.nextLine();
 
-		boolean hasChanged = false;
-		for (Account account : acList) {
-			if (account.getAccountNo().equals(accountNo)) {
-				account.deposit(balance);
-				hasChanged = true;
-				break;
-			}
-		}
-		if (hasChanged) {
+		if (acMap.containsKey(accountNo)) {
+			acMap.get(accountNo).deposit(balance);
 			System.out.println("결과: 예금 성공했습니다.");
 		} else {
 			System.out.println("결과: 예금 실패했습니다.");
@@ -142,21 +127,17 @@ public class Ex26 {
 		long balance = in.nextLong();
 		in.nextLine();
 
-		boolean hasChanged = false;
-
-		for (Account account : acList) {
-			if (account.getAccountNo().equals(accountNo) && account.getBalance() >= balance
-					&& account.getPassword().equals(password)) {
+		if (acMap.containsKey(accountNo)) {
+			Account account = acMap.get(accountNo);
+			if (account.getPassword().equals(password) && account.getBalance() >= balance) {
 				account.withdraw(balance);
-				hasChanged = true;
-				break;
+				System.out.println("결과: 출금 성공했습니다.");
+
 			}
-		}
-		if (hasChanged) {
-			System.out.println("결과: 출금 성공했습니다.");
 		} else {
 			System.out.println("결과: 출금 실패했습니다.");
 		}
+
 	}
 
 	// 비밀번호 변경
@@ -170,9 +151,9 @@ public class Ex26 {
 		System.out.println("새 비밀번호: ");
 		String newPassword = in.nextLine();
 
-		for (Account account : acList) {
-			if (account.getAccountNo().equals(accountNo) && account.getAccountOwner().equals(accountOwner)
-					&& account.getPassword().equals(oldPassword)) {
+		if (acMap.containsKey(accountNo)) {
+			Account account = acMap.get(accountNo);
+			if (account.getAccountOwner().equals(accountOwner) && account.getPassword().equals(oldPassword)) {
 				if (!checkPassword(newPassword)) {
 					System.out.println("결과: 실패(패스워드는 4자리 숫자여야 합니다.)");
 					return;
@@ -181,13 +162,16 @@ public class Ex26 {
 				System.out.println("결과: 비밀번호 변경 성공");
 				return;
 			}
+
+		} else {
+			System.out.println("결과: 실패(해당 계좌번호는 존재하지 않습니다.)");
 		}
-		System.out.println("결과: 실패(계좌번호나 계좌주와 비밀번호가 맞지 않습니다.)");
+		System.out.println("결과: 실패(계좌주와 비밀번호가 맞지 않습니다.)");
 	}
 
 	// 비밀번호 조건 확인(비밀번호 해도 되면 true 아니면 false)
-	private boolean checkPassword(String password) {
-		if (password.length() == 4 && password.matches("-?\\d+(\\.\\d+)?")) {
+	private static boolean checkPassword(String password) {
+		if (password.length() == 4 && password.matches("\\d{4}")) {
 			return true;
 		} else {
 			return false;
@@ -195,39 +179,49 @@ public class Ex26 {
 	}
 
 	// 각종 print
-	private String print(String order) {
-		if (order == "1") {
-			return """
+	private static void print(String order) {
+		if (order == "print_menu") {
+			String s = """
+					----------------------------------------------------------------
+					1. 계좌생성 | 2. 계좌목록 | 3. 예금 | 4. 출금 | 5. 비밀번호 변경 | 6. 종료
+					----------------------------------------------------------------
+					선택 >""";
+			System.out.print(s);
+		} else if (order.equals("1")) {
+			String s = """
 					---------
 					계좌생성
 					---------
 					""";
-		} else if (order == "2") {
-			return """
+			System.out.println(s);
+		} else if (order.equals("2")) {
+			String s = """
 					---------
 					계좌목록
 					---------
 					""";
-		} else if (order == "3") {
-			return """
+			System.out.println(s);
+		} else if (order.equals("3")) {
+			String s = """
 					---------
 					예금
 					---------
 					""";
-		} else if (order == "4") {
-			return """
+			System.out.println(s);
+		} else if (order.equals("4")) {
+			String s = """
 					---------
 					출금
 					---------
 					""";
-		} else if (order == "5") {
-			return """
+			System.out.println(s);
+		} else if (order.equals("5")) {
+			String s = """
 					---------
 					비밀번호변경
 					---------
 					""";
-		} else {
-			return "";
+			System.out.println(s);
 		}
 	}
 }
@@ -247,9 +241,6 @@ class Account {
 	}
 
 	// 접근자
-	public String getAccountNo() {
-		return accountNo;
-	}
 
 	public String getAccountOwner() {
 		return accountOwner;
